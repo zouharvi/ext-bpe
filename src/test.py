@@ -11,7 +11,6 @@ text_eval = """Lorem LOREM lOreM lorem"""
 model = extBPE()
 model.fit(text_train, min_subwords=200, max_iter=70, lowercase=True)
 
-# text, text_ids = model.encode("lowest highest low")
 text_bpe_1, text_ids_1 = model.encode(text_eval)
 text_bpe_2, text_ids_2 = model.encode(text_eval, disable_special=True)
 print(text_bpe_1, sum([len(word) for word in text_bpe_1]))

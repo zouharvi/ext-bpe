@@ -68,7 +68,7 @@ class extBPE:
         """
 
         # add all text characters, our control sequence and all ascii letters
-        text_chars = set(text) | {"@eow", "@low ", "@upp ", "@cap "}
+        text_chars = set(text) | {"@eow", "@low", "@upp", "@cap"}
         text_chars = text_chars | set(string.ascii_letters)
         if " " in text_chars:
             text_chars.remove(" ")
@@ -198,11 +198,11 @@ class extBPE:
 
         def find_target_op(word, word_bped):
             if word == "".join(word_bped).replace("@eow", "").lower():
-                return ["@low "] + word_bped
+                return ["@low"] + word_bped
             elif word == "".join(word_bped).replace("@eow", "").upper():
-                return ["@upp "] + word_bped
+                return ["@upp"] + word_bped
             elif word == "".join(word_bped).replace("@eow", "").capitalize():
-                return ["@cap "] + word_bped
+                return ["@cap"] + word_bped
             else:
                 # can't reverse opretaions
                 return word_true
@@ -266,12 +266,12 @@ class extBPE:
         word = word.replace("@eow", "")
 
         # process special tags and strip them
-        if word.startswith("@low "):
-            word = word[5:].lower()
-        elif word.startswith("@upp "):
-            word = word[5:].upper()
-        elif word.startswith("@cap "):
-            word = word[5:].capitalize()
+        if word.startswith("@low"):
+            word = word[4:].lower()
+        elif word.startswith("@upp"):
+            word = word[4:].upper()
+        elif word.startswith("@cap"):
+            word = word[4:].capitalize()
         return word
 
     def _decode_word(self, word):
