@@ -250,10 +250,10 @@ class extBPE:
         ]
 
     def decode(self, text):
-        return [
+        return " ".join([
             self._post_process_word(self._decode_word(word))
             for word in text
-        ]        
+        ])
 
     def decode_raw(self, text):
         self.check_fitted()
