@@ -153,6 +153,7 @@ class extBPE:
         # TODO: move to the beginning for stability
         for char_i, i in zip(text_chars, range(i + 1, i + 1 + len(text_chars))):
             self.bpe_codes_join[char_i] = i
+            self.vocab_size = i
 
         self.bpe_codes_join_rev = {
             v: k
@@ -272,6 +273,8 @@ class extBPE:
             word = word[4:].upper()
         elif word.startswith("@cap"):
             word = word[4:].capitalize()
+
+        word = word.replace("&#64;", "@").replace("&#35", "#")
         return word
 
     def _decode_word(self, word):
