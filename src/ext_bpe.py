@@ -1,6 +1,7 @@
 from collections import Counter
 import re
 from operator import itemgetter
+import string
 
 def get_pair_stats(vocab):
     """Get counts of pairs of consecutive symbols."""
@@ -46,23 +47,33 @@ def get_pairs(word):
 
 
 def tokenizer(text):
+    """TODO: replace in the future by something proper"""
     return text.split()
 
 def separator(text):
+    """Adds spaces between letters"""
     return ' '.join(list(text))
 
 class extBPE:
     def __init__(self):
         self.fitted = False
-        pass
 
-    def fit(self, text, n_iter=5):
-        text_chars = set(text) | {"@eow"}
+    def fit(self, text, max_iter=5, min_subwords=None):
+        """
+        TODO: documentation
+        """
+
+        # add all text characters, our control sequence and all ascii letters
+        text_chars = set(text) | {"@eow"} | set(string.ascii_letters)
         if " " in text_chars:
             text_chars.remove(" ")
 
         # replace our control characters
         text = text.replace("#", "&#35").replace("@", "&#64;")
+
+        # keep original text for casing information
+        text_str_original = str(text)
+        text_str_lower = str(text)
 
         # tokenize and preprocess text
         text = tokenizer(text)
@@ -75,13 +86,23 @@ class extBPE:
         self.bpe_codes = {}
         
         # perform merging
-        for i in range(n_iter):
+        for i in range(max_iter):
             pair_stats = get_pair_stats(vocab)
             best_pair = max(pair_stats, key=pair_stats.get)
             vocab = merge_vocab(best_pair, vocab)
+
+            # check whether we would have less subwords than we need
+            if min_subwords is not None:
+                total_subwords = sum([
+                    v*len(k.split())
+                    for k,v in vocab.items()
+                ])
+                if total_subwords <= min_subwords:
+                    break
+
             self.bpe_codes[best_pair] = i
 
-        print(vocab)
+        # find most common casing
 
         self.bpe_codes_join = {
             (k[0]+k[1]):v
@@ -106,7 +127,6 @@ class extBPE:
     def check_fitted(self):
         if not self.fitted:
             raise Exception("The model has not been fitten yet.")
-
 
     def encode(self, text):
         self.check_fitted()

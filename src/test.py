@@ -2,10 +2,12 @@
 
 from ext_bpe import extBPE
 
-text = "low low low low low lower lower newest newest newest newest newest newest widest widest widest happier happier"
+text = """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+"""
 
 model = extBPE()
-model.fit(text)
+model.fit(text, min_subwords=200, max_iter=100)
 
 text, text_ids = model.encode("lowest highest low")
 
